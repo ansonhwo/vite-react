@@ -15,6 +15,6 @@ export type TCard = {
 };
 
 export type TPositionedCard = TCard & {
-    position: number;
+    index: number;
     offsetX: number;
 };
