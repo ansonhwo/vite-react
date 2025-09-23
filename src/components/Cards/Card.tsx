@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { JSAnimation, animate } from 'animejs';
 
-import { TPositionedCard } from '../types';
+import { TPositionedCard } from '../../types';
 
 export type CardProps = {
     card: TPositionedCard;
@@ -11,7 +11,7 @@ const getCardHoverUpAnimation = (target: HTMLImageElement): JSAnimation => {
     return animate(target, {
         y: [
             {
-                to: '-2rem', ease: 'easeInSine', duration: 250
+                to: '-2rem', ease: 'linear', duration: 80
             },
         ],
         ease: 'inOutCirc',
@@ -23,7 +23,7 @@ const getCardHoverDownAnimation = (target: HTMLImageElement): JSAnimation => {
     return animate(target, {
         y: [
             {
-                to: 0, ease: 'easeOutSine', duration: 250
+                to: 0, ease: 'easeOutSine', duration: 150
             }
         ],
         ease: 'inOutCirc',
@@ -62,10 +62,11 @@ export const Card = ({ card }: CardProps) => {
     return <img
         ref={cardRef}
         src={card.img}
-        height={300}
-        width={300}
-        style={{ transform: `translateX(${card.offsetX})`, zIndex: card.index }}
-        className={CLASS_NAME}
+        style={{ zIndex: card.index }}
+        className={[
+            'card',
+            CLASS_NAME
+        ].join(' ')}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
     />;

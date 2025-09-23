@@ -1,36 +1,50 @@
-import { useCallback, useEffect, useState } from 'react';
-import { generateDeck } from './utils/cardsUtil';
-import { shuffleList } from './utils/shuffleUtil';
-import { TCard } from './types';
+import { useCallback, useState } from 'react';
 
-import { CardCarousel } from './components/CardCarousel';
+import { CardContainer } from './components/Cards/CardContainer';
+import { Tabs } from './components/Tabs/Tabs';
+import { TView } from './types';
 import './App.css';
 
-// 1) Display all cards in the deck
-// 2) Shuffle cards on demand
-// 3) Be able to hover over existing cards
-// 4) Able to change properties on existing cards
+const ErrorComponent = () => {
+    return <>Error!</>;
+};
+
+interface TabConfig {
+    description: string;
+    label: string;
+    component: React.ReactNode;
+}
+
+const tabConfig: Record<TView, TabConfig> = {
+    [TView.CARDS]: {
+        label: TView.CARDS,
+        description: 'Playing Cards',
+        component: <CardContainer />
+    },
+    [TView.OTHER]: {
+        label: 'Other',
+        description: 'Other',
+        component: <>Under Development</>
+    }
+};
 
 function App() {
-    const [cards, setCards] = useState<TCard[]>([]);
+    const [view, setView] = useState<TView>(TView.CARDS);
 
-    useEffect(() => {
-        setCards(generateDeck());
+    const handleTabChange = useCallback((tab: TView) => {
+        setView(tab);
     }, []);
 
-    const handleShuffle = useCallback(() => {
-        const newCards = shuffleList(cards.slice());
-        setCards(newCards);
-    }, [cards]);
-
     return (
-        <>
-            <h1>Playing Cards</h1>
-            <button onClick={handleShuffle}>
-                Shuffle
-            </button>
-            <CardCarousel cards={cards} />
-        </>
+        <div id="app">
+            <header id="view-controls">
+                <div className="view-description">{tabConfig[view].description}</div>
+                <Tabs activeTab={view} onTabChange={handleTabChange} />
+            </header>
+            <div className="component-display">
+                {tabConfig[view].component ?? <ErrorComponent />}
+            </div>
+        </div>
     );
 }
 

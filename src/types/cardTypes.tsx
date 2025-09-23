@@ -12,6 +12,7 @@ export type TCard = {
     value: number;
     displayValue: TCardDisplayValue;
     img: string;
+    selected?: boolean;
 };
 
 export type TPositionedCard = TCard & {
